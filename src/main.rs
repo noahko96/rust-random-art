@@ -29,27 +29,19 @@ fn main() {
     let bg5 = random_color();
     let bg6 = random_color();
 
-    for i in 0..1_800 {
-        let (background, num) = match i {
-            0..=899 => {
-                match i {
-                    _ if i % 3 == 0 => (bg1, 267),
-                    _ if i % 3 == 1 => (bg2, 267),
-                    _ => (bg3, 266),
-                }
-            },
-            _ => {
-                match i {
-                    _ if i % 3 == 0 => (bg4, 267),
-                    _ if i % 3 == 1 => (bg5, 267),
-                    _ => (bg6, 266),
-                }
-            },
-        };
+    for row in 0..600 {
+        for col in 0..800 {
+            let background = match (row, col) {
+                (0..=299, 0..=266) => bg1,
+                (0..=299, 267..=533) => bg2,
+                (0..=299, _) => bg3,
+                (_, 0..=266) => bg4,
+                (_, 267..=533) => bg5,
+                _ => bg6,
+            };
 
-        let (bgr, bgg, bgb) = background;
+            let (bgr, bgg, bgb) = background;
 
-        for _j in 0..num {
             vec.push(bgr);
             vec.push(bgg);
             vec.push(bgb);
