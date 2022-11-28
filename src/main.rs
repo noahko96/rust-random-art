@@ -22,22 +22,22 @@ fn main() {
 
     let mut vec = Vec::with_capacity(1_440_000);
 
-    let bg1 = random_color();
-    let bg2 = random_color();
-    let bg3 = random_color();
-    let bg4 = random_color();
-    let bg5 = random_color();
-    let bg6 = random_color();
+    let colors1 = (random_color(), random_color());
+    let colors2 = (random_color(), random_color());
+    let colors3 = (random_color(), random_color());
+    let colors4 = (random_color(), random_color());
+    let colors5 = (random_color(), random_color());
+    let colors6 = (random_color(), random_color());
 
     for row in 0..600 {
         for col in 0..800 {
-            let background = match (row, col) {
-                (0..=299, 0..=266) => bg1,
-                (0..=299, 267..=533) => bg2,
-                (0..=299, _) => bg3,
-                (_, 0..=266) => bg4,
-                (_, 267..=533) => bg5,
-                _ => bg6,
+            let (background, logo) = match (row, col) {
+                (0..=299, 0..=266) => colors1,
+                (0..=299, 267..=533) => colors2,
+                (0..=299, _) => colors3,
+                (_, 0..=266) => colors4,
+                (_, 267..=533) => colors5,
+                _ => colors6,
             };
 
             let (bgr, bgg, bgb) = background;
