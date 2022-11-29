@@ -22,19 +22,21 @@ fn main() {
 
     let mut vec = Vec::with_capacity(1_440_000);
 
-    let info1 = (random_color(), random_color(), 149, 132);
-    let info2 = (random_color(), random_color(), 149, 399);
-    let info3 = (random_color(), random_color(), 149, 665);
-    let info4 = (random_color(), random_color(), 449, 132);
-    let info5 = (random_color(), random_color(), 449, 399);
-    let info6 = (random_color(), random_color(), 449, 665);
+    let info1 = (random_color(), random_color(), random_color(), 164, 112);
+    let info2 = (random_color(), random_color(), random_color(), 164, 379);
+    let info3 = (random_color(), random_color(), random_color(), 164, 645);
+    let info4 = (random_color(), random_color(), random_color(), 464, 112);
+    let info5 = (random_color(), random_color(), random_color(), 464, 379);
+    let info6 = (random_color(), random_color(), random_color(), 464, 645);
 
-    let radius = 66;
-    let radius_squared = radius * radius;
+    let big_radius = 66;
+    let big_radius_squared = big_radius * big_radius;
+    let small_radius = 32;
+    let small_radius_squared = small_radius * small_radius;
 
     for row in 0..600 {
         for col in 0..800 {
-            let (background, logo, center_row, center_col) = match (row, col) {
+            let (background, big_circle, small_circle, center_row, center_col) = match (row, col) {
                 (0..=299, 0..=266) => info1,
                 (0..=299, 267..=533) => info2,
                 (0..=299, _) => info3,
@@ -45,10 +47,19 @@ fn main() {
 
             let row_diff = row - center_row;
             let col_diff = col - center_col;
-            let squared_sum = (row_diff * row_diff) + (col_diff * col_diff);
+            let big_squared_sum = (row_diff * row_diff) + (col_diff * col_diff);
 
-            let (r, g, b) = if squared_sum <= radius_squared {
-                logo
+            let center_row = center_row - 70;
+            let center_col = center_col + 90;
+
+            let row_diff = row - center_row;
+            let col_diff = col - center_col;
+            let small_squared_sum = (row_diff * row_diff) + (col_diff * col_diff);
+
+            let (r, g, b) = if big_squared_sum <= big_radius_squared {
+                big_circle
+            } else if small_squared_sum <= small_radius_squared {
+                small_circle
             } else {
                 background
             };
