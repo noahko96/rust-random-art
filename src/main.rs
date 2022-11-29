@@ -1,4 +1,4 @@
-use png::{BitDepth, ColorType, Encoder, ScaledFloat, SourceChromaticities};
+use png::{BitDepth, ColorType, Encoder};
 use rand::Rng;
 use std::{fs::File, io::BufWriter, path::Path};
 
@@ -10,14 +10,6 @@ fn main() {
     let mut encoder = Encoder::new(w, 800, 600);
     encoder.set_color(ColorType::Rgb);
     encoder.set_depth(BitDepth::Eight);
-    encoder.set_source_gamma(ScaledFloat::from_scaled(45455));
-    let source_chromaticities = SourceChromaticities::new(
-        (0.31270, 0.32900),
-        (0.64000, 0.33000),
-        (0.30000, 0.60000),
-        (0.15000, 0.06000)
-    );
-    encoder.set_source_chromaticities(source_chromaticities);
     let mut writer = encoder.write_header().unwrap();
 
     let mut vec = Vec::with_capacity(1_440_000);
@@ -45,16 +37,12 @@ fn main() {
                 _ => info6,
             };
 
-            let row_diff = row - center_row;
-            let col_diff = col - center_col;
-            let big_squared_sum = (row_diff * row_diff) + (col_diff * col_diff);
+            let big_squared_sum = squared_sum(row, col, center_row, center_col);
 
             let center_row = center_row - 70;
             let center_col = center_col + 90;
 
-            let row_diff = row - center_row;
-            let col_diff = col - center_col;
-            let small_squared_sum = (row_diff * row_diff) + (col_diff * col_diff);
+            let small_squared_sum = squared_sum(row, col, center_row, center_col);
 
             let (r, g, b) = if big_squared_sum <= big_radius_squared {
                 big_circle
@@ -79,4 +67,11 @@ fn random_sample() -> u8 {
 
 fn random_color() -> (u8, u8, u8) {
     (random_sample(), random_sample(), random_sample())
+}
+
+fn squared_sum(row: i32, col: i32, center_row: i32, center_col: i32) -> i32 {
+    let row_diff = row - center_row;
+    let col_diff = col - center_col;
+
+    (row_diff * row_diff) + (col_diff * col_diff)
 }
