@@ -22,29 +22,40 @@ fn main() {
 
     let mut vec = Vec::with_capacity(1_440_000);
 
-    let colors1 = (random_color(), random_color());
-    let colors2 = (random_color(), random_color());
-    let colors3 = (random_color(), random_color());
-    let colors4 = (random_color(), random_color());
-    let colors5 = (random_color(), random_color());
-    let colors6 = (random_color(), random_color());
+    let info1 = (random_color(), random_color(), 149, 132);
+    let info2 = (random_color(), random_color(), 149, 399);
+    let info3 = (random_color(), random_color(), 149, 665);
+    let info4 = (random_color(), random_color(), 449, 132);
+    let info5 = (random_color(), random_color(), 449, 399);
+    let info6 = (random_color(), random_color(), 449, 665);
+
+    let radius = 66;
+    let radius_squared = radius * radius;
 
     for row in 0..600 {
         for col in 0..800 {
-            let (background, logo) = match (row, col) {
-                (0..=299, 0..=266) => colors1,
-                (0..=299, 267..=533) => colors2,
-                (0..=299, _) => colors3,
-                (_, 0..=266) => colors4,
-                (_, 267..=533) => colors5,
-                _ => colors6,
+            let (background, logo, center_row, center_col) = match (row, col) {
+                (0..=299, 0..=266) => info1,
+                (0..=299, 267..=533) => info2,
+                (0..=299, _) => info3,
+                (_, 0..=266) => info4,
+                (_, 267..=533) => info5,
+                _ => info6,
             };
 
-            let (bgr, bgg, bgb) = background;
+            let row_diff = row - center_row;
+            let col_diff = col - center_col;
+            let squared_sum = (row_diff * row_diff) + (col_diff * col_diff);
 
-            vec.push(bgr);
-            vec.push(bgg);
-            vec.push(bgb);
+            let (r, g, b) = if squared_sum <= radius_squared {
+                logo
+            } else {
+                background
+            };
+
+            vec.push(r);
+            vec.push(g);
+            vec.push(b);
         }
     }
 
